@@ -24,9 +24,9 @@ async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(result)
 
 def main():
-    token = os.getenv("BOT_TOKEN")
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
     if not token:
-        logger.error("BOT_TOKEN не найден!")
+        logger.error("TELEGRAM_BOT_TOKEN не найден!")
         return
     
     app = Application.builder().token(token).build()
