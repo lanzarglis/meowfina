@@ -8,12 +8,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Я Мяуфина — переводчик с кошачьего на человеческий 🐱\n\nМяу!")
+    await update.message.reply_text("Привет! Я Мяуфина 🐱")
 
 async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cat_text = update.message.text
     
-    # Простая логика перевода (заглушка)
     translations = {
         "мяу": "привет",
         "мрр": "мурлычу",
@@ -21,7 +20,7 @@ async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "ня": "хочу еды"
     }
     
-    result = translations.get(cat_text.lower(), f"Я не поняла: {cat_text} 🐱")
+    result = translations.get(cat_text.lower(), f"Не поняла: {cat_text} 🐱")
     await update.message.reply_text(result)
 
 def main():
