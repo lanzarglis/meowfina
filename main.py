@@ -1,4 +1,4 @@
-
+python
 import os
 import logging
 from telegram import Update
@@ -8,21 +8,21 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Я Мяуфина — переводчик с кошачьего 🐱\nНапиши мне что-нибудь!")
+    await update.message.reply_text("Привет! Я Мяуфина — переводчик с кошачьего 🐱")
 
 async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    cat_text = update.message.text
-
+    cat_text = update.message.text.lower()
+    
     translations = {
         "мяу": "привет",
-        "мрр": "мурлычу",
+        "мрр": "мурлычу", 
         "гав": "пёс",
         "ня": "хочу еды",
-        "ффрр": "злая",
+        "ффф": "злая",
         "хрр": "сплю"
     }
     
-    result = translations.get(cat_text.lower(), f"Не поняла: {cat_text} 🐱")
+    result = translations.get(cat_text, f"Я не поняла: {update.message.text} 🐱")
     await update.message.reply_text(result)
 
 def main():
@@ -32,7 +32,6 @@ def main():
         return
 
     app = Application.builder().token(token).build()
-    
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, translate))
     
