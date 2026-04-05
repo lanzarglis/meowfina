@@ -9,22 +9,35 @@ logger = logging.getLogger(__name__)
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 
+# LibreTranslate endpoint (бесплатный)
+LT_URL = os.environ.get('LT_URL', 'https://libretranslate.com')
+
 def translate(text, src='ru', tgt='en'):
-    url = 'https://translate.googleapis.com/translate_a/single'
-    params = {'client': 'gtx', 'sl': src, 'tl': tgt, 'dt': 't', 'q': text}
     try:
-        resp = requests.get(url, params=params, timeout=10)
-        result = resp.json()
-        if result and result[0]:
-            return ''.join([item[0] for item in result[0] if item[0]])
+        resp = requests.post(f'{LT_URL}/translate', json={
+            'q': text,
+            'source': src,
+            'target': tgt,
+            'format': 'text'
+        }, timeout=10)
+        if resp.status_code == 200:
+            return resp.json().get('translatedText', '')
+        else:
+            logger.error(f'Translate error {resp.status_code}: {resp.text}')
+            return None
     except Exception as e:
-        logger.error(f'Translate error: {e}')
-        return 'Ошибка перевода'
-    return 'Не удалось перевести'
+        logger.error(f'Translate exception: {e}')
+        return None
 
 def cat_translate(text):
+    # Russian -> English -> Russian (двойной перевод для "кошачьего" эффекта)
     en = translate(text, 'ru', 'en')
-    return translate(en, 'en', 'ru')
+    if not en:
+        return 'Ошибка перевода'
+    ru = translate(en, 'en', 'ru')
+    if not ru:
+        return 'Ошибка перевода'
+    return ru
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Привет! Я Meowfina — переводчик 🐱')
@@ -33,18 +46,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Пиши или отправь голосовое — переведу!')
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Check for voice message
     if update.message.voice:
-        await update.message.reply_text('Получил голосовое, обрабатываю...')
-        try:
-            voice_file = await update.message.voice.get_file()
-            voice_path = await voice_file.download_as_byte_array()
-            # Send to speech-to-text (using Telegram's voice recognition)
-            # For now, ask user to send text
-            await update.message.reply_text('Перевод голосовых пока не поддерживается. Напиши текстом!')
-        except Exception as e:
-            logger.error(f'Voice error: {e}')
-            await update.message.reply_text('Не удалось обработать голосовое')
+        await update.message.reply_text('Голосовые пока не поддерживаются. Напиши текстом!')
         return
     
     translation = cat_translate(update.message.text)
