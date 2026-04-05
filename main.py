@@ -30,9 +30,23 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Привет! Я Meowfina — переводчик 🐱')
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('Пиши — переведу!')
+    await update.message.reply_text('Пиши или отправь голосовое — переведу!')
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Check for voice message
+    if update.message.voice:
+        await update.message.reply_text('Получил голосовое, обрабатываю...')
+        try:
+            voice_file = await update.message.voice.get_file()
+            voice_path = await voice_file.download_as_byte_array()
+            # Send to speech-to-text (using Telegram's voice recognition)
+            # For now, ask user to send text
+            await update.message.reply_text('Перевод голосовых пока не поддерживается. Напиши текстом!')
+        except Exception as e:
+            logger.error(f'Voice error: {e}')
+            await update.message.reply_text('Не удалось обработать голосовое')
+        return
+    
     translation = cat_translate(update.message.text)
     await update.message.reply_text(translation)
 
@@ -45,6 +59,7 @@ def main():
     app.add_handler(CommandHandler('start', start_command))
     app.add_handler(CommandHandler('help', help_command))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_handler(MessageHandler(filters.VOICE, handle_message))
     
     logger.info('Meowfina started!')
     app.run_polling(poll_interval=3)
