@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 HF_TOKEN = os.environ.get('HF_TOKEN')
 
-# Новый URL Hugging Face Inference API
+# URL Hugging Face Inference API
 HF_API_URL = "https://router.huggingface.co/facebook/mbart-large-50-many-to-many-mmt"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -39,7 +39,14 @@ async def translate_to_human(text: str) -> str:
     }
     
     try:
-        response = requests.post(HF_API_URL, headers=headers, json=payload, timeout=30)
+        logger.info(f"Sending request to HF API: {HF_API_URL}")
+        response = requests.post(HF_API_URL, headers=headers, json=payload, timeout=60)
+        logger.info(f"Response status: {response.status_code}")
+        logger.info(f"Response text: {response.text[:500]}")
+        
+        if response.status_code != 200:
+            return f"Ошибка API: статус {response.status_code}. Ответ: {response.text[:200]}"
+        
         result = response.json()
         
         if isinstance(result, list) and len(result) > 0:
@@ -53,7 +60,7 @@ async def translate_to_human(text: str) -> str:
                 }
             }
             
-            response_ru = requests.post(HF_API_URL, headers=headers, json=payload_ru, timeout=30)
+            response_ru = requests.post(HF_API_URL, headers=headers, json=payload_ru, timeout=60)
             result_ru = response_ru.json()
             
             if isinstance(result_ru, list) and len(result_ru) > 0:
@@ -76,6 +83,8 @@ def main():
     if not TELEGRAM_BOT_TOKEN:
         logger.error("TELEGRAM_BOT_TOKEN не установлен!")
         return
+    
+    logger.info(f"HF_TOKEN set: {bool(HF_TOKEN)}")
     
     app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start_command))
