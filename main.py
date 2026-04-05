@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 HF_TOKEN = os.environ.get('HF_TOKEN')
 
-# HuggingFace Inference API - правильный URL
-HF_API_URL = "https://api-inference.huggingface.co/pipeline/translation/facebook/mbart-large-50-many-to-many-mmt"
+# HuggingFace Inference API - новый URL
+HF_API_URL = "https://router.huggingface.co/pipeline/translation/facebook/mbart-large-50-many-to-many-mmt"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я Meowfina — переводчик с кошачьего на человеческий 🐱\n\nПросто напиши мне что-нибудь на кошачьем языке!")
@@ -52,6 +52,7 @@ async def translate_to_human(text: str) -> str:
         if isinstance(result, list) and len(result) > 0:
             english_text = result[0].get('translation_text', '')
             
+            # Обратный перевод на русский
             payload_ru = {
                 "inputs": english_text,
                 "parameters": {
