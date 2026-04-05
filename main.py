@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 HF_TOKEN = os.environ.get('HF_TOKEN')
 
-# HuggingFace Inference API - новый URL
-HF_API_URL = "https://router.huggingface.co/pipeline/translation/facebook/mbart-large-50-many-to-many-mmt"
+# HuggingFace Inference API - используем Helsinki-NLP (бесплатная модель)
+HF_API_URL = "https://router.huggingface.co/helsinki-nlp/opus-mt-ru-en"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я Meowfina — переводчик с кошачьего на человеческий 🐱\n\nПросто напиши мне что-нибудь на кошачьем языке!")
@@ -31,11 +31,7 @@ async def translate_to_human(text: str) -> str:
     }
     
     payload = {
-        "inputs": text,
-        "parameters": {
-            "src_lang": "ru_RU",
-            "tgt_lang": "en_XX"
-        }
+        "inputs": text
     }
     
     try:
@@ -54,14 +50,14 @@ async def translate_to_human(text: str) -> str:
             
             # Обратный перевод на русский
             payload_ru = {
-                "inputs": english_text,
-                "parameters": {
-                    "src_lang": "en_XX",
-                    "tgt_lang": "ru_RU"
-                }
+                "inputs": english_text
             }
             
-            response_ru = requests.post(HF_API_URL, headers=headers, json=payload_ru, timeout=60)
+            # Модель для перевода с английского на русский
+            response_ru = requests.post(
+                "https://router.huggingface.co/helsinki-nlp/opus-mt-en-ru", 
+                headers=headers, json=payload_ru, timeout=60
+            )
             result_ru = response_ru.json()
             
             if isinstance(result_ru, list) and len(result_ru) > 0:
