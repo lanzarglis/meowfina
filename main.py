@@ -12,14 +12,16 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 HF_TOKEN = os.environ.get('HF_TOKEN')
 
-# HuggingFace Inference API - используем Helsinki-NLP (бесплатная модель)
-HF_API_URL = "https://router.huggingface.co/helsinki-nlp/opus-mt-ru-en"
+# HuggingFace Inference API - используем правильный формат
+# Бесплатный Inference API: https://huggingface.co/docs/api-inference/quicktour
+MODEL_ID = "Helsinki-NLP/opus-mt-ru-en"
+HF_API_URL = f"https://api-inference.huggingface.co/pipeline/translation/{MODEL_ID}"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Я Meowfina — переводчик с кошачьего на человеческий 🐱\n\nПросто напиши мне что-нибудь на кошачьем языке!")
+    await update.message.reply_text("Привет! Я Meowfina — переводчик с кошачьего на человеческий 🐱\n\nПросто напиши мне что-нибудь!")
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Напиши мне кошачьи звуки, и я переведу их на человеческий! 🐱➡️👨")
+    await update.message.reply_text("Напиши мне текст, и я переведу его! 🐱➡️👨")
 
 async def translate_to_human(text: str) -> str:
     if not HF_TOKEN:
@@ -55,7 +57,7 @@ async def translate_to_human(text: str) -> str:
             
             # Модель для перевода с английского на русский
             response_ru = requests.post(
-                "https://router.huggingface.co/helsinki-nlp/opus-mt-en-ru", 
+                "https://api-inference.huggingface.co/pipeline/translation/Helsinki-NLP/opus-mt-en-ru", 
                 headers=headers, json=payload_ru, timeout=60
             )
             result_ru = response_ru.json()
