@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 HF_TOKEN = os.environ.get('HF_TOKEN')
 
-# URL Hugging Face Inference API
-HF_API_URL = "https://api-inference.huggingface.co/models/facebook/mbart-large-50-many-to-many-mmt"
+# Новый URL Hugging Face Inference API
+HF_API_URL = "https://router.huggingface.co/facebook/mbart-large-50-many-to-many-mmt"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я Meowfina — переводчик с кошачьего на человеческий 🐱\n\nПросто напиши мне что-нибудь на кошачьем языке!")
