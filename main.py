@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 HF_TOKEN = os.environ.get('HF_TOKEN')
 
-# HuggingFace Inference API - НОВЫЙ формат с router.huggingface.co
+# HuggingFace Inference API - прямой вызов модели
 MODEL_ID = "Helsinki-NLP/opus-mt-ru-en"
-HF_API_URL = f"https://router.huggingface.co/pipeline/translation/{MODEL_ID}"
+HF_API_URL = f"https://api-inference.huggingface.co/models/{MODEL_ID}"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я Meowfina — переводчик с кошачьего на человеческий 🐱\n\nПросто напиши мне что-нибудь!")
@@ -55,7 +55,7 @@ async def translate_to_human(text: str) -> str:
             }
             
             response_ru = requests.post(
-                "https://router.huggingface.co/pipeline/translation/Helsinki-NLP/opus-mt-en-ru", 
+                "https://api-inference.huggingface.co/models/Helsinki-NLP/opus-mt-en-ru", 
                 headers=headers, json=payload_ru, timeout=60
             )
             result_ru = response_ru.json()
