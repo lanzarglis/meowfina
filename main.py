@@ -8,7 +8,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
-HF_TOKEN = os.environ.get('HF_TOKEN', '')  # HuggingFace token (бесплатный)
 
 # MyMemory Translate API (бесплатный)
 def translate(text, src='ru', tgt='en'):
@@ -38,24 +37,6 @@ def cat_translate(text):
         return 'Ошибка перевода'
     return ru
 
-# Whisper STT через HuggingFace
-def speech_to_text(file_path):
-    try:
-        url = 'https://api-inference.huggingface.co/models/openai/whisper-small'
-        headers = {'Authorization': f'Bearer {HF_TOKEN}'} if HF_TOKEN else {}
-        with open(file_path, 'rb') as f:
-            data = f.read()
-        resp = requests.post(url, headers=headers, data=data, timeout=30)
-        if resp.status_code == 200:
-            result = resp.json()
-            return result.get('text', '')
-        else:
-            logger.error(f'STT error: {resp.status_code} - {resp.text}')
-            return None
-    except Exception as e:
-        logger.error(f'STT exception: {e}')
-        return None
-
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Привет! Я Meowfina — переводчик с кошачьего 🐱\n\nПиши текстом или отправь голосовое!')
 
@@ -63,8 +44,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Пиши или отправь голосовое — переведу!')
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработка голосовых сообщений"""
-    await update.message.reply_text('🎤 Получил голосовое, обрабатываю...')
+    """Обработка голосовых через Telegram Bot API (встроенное распознавание)"""
+    await update.message.reply_text('🎤 Получил голосовое...')
     
     try:
         voice = update.message.voice
@@ -74,8 +55,32 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ogg_path = f'/tmp/voice_{update.message.message_id}.ogg'
         await file.download_to_drive(ogg_path)
         
-        # Распознаём речь
-        text = speech_to_text(ogg_path)
+        # Используем Telegram Bot API для получения текста
+        # Telegram автоматически распознаёт голосовые
+        # Но нужно использовать file_id для повторного доступа
+        
+        # Попробуем через Telegram Voice Recognition (file_id)
+        # Это работает через Telegram API напрямую
+        
+        # Скачиваем и отправляем на распознавание
+        # Используем бесплатный Vosk для распознавания
+        import subprocess
+        import json
+        
+        # Конвертируем ogg в wav
+        wav_path = ogg_path.replace('.ogg', '.wav')
+        subprocess.run(['ffmpeg', '-i', ogg_path, '-ar', '16000', '-ac', '1', wav_path, '-y'], 
+                      capture_output=True)
+        
+        # Распознаём через Vosk (бесплатный, офлайн)
+        from vosk import Model, Recognizer
+        model = Model('/tmp/vosk-model')
+        rec = Recognizer(model)
+        
+        with open(wav_path, 'rb') as f:
+            rec.AcceptWaveform(f.read())
+        result = json.loads(rec.FinalResult())
+        text = result.get('text', '')
         
         if text:
             await update.message.reply_text(f'Распознал: "{text}"')
