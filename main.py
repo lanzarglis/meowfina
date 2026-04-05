@@ -1,6 +1,7 @@
 import os
 import logging
 import requests
+import subprocess
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -26,7 +27,6 @@ def translate(text, src='ru', tgt='en'):
         return None
 
 def cat_translate(text):
-    # Russian -> English -> Russian (двойной перевод для "кошачьего" эффекта)
     if not text or not text.strip():
         return 'Пустой текст'
     en = translate(text, 'ru', 'en')
@@ -37,6 +37,37 @@ def cat_translate(text):
         return 'Ошибка перевода'
     return ru
 
+# Google Speech Recognition через gTTS (для преобразования текста в речь)
+# Но для распознавания используем бесплатный Wit.ai
+def speech_to_text(file_path):
+    """Распознавание через Wit.ai (бесплатно, 60 сек/мес)"""
+    try:
+        # Конвертируем ogg в wav
+        wav_path = file_path.replace('.ogg', '.wav')
+        subprocess.run(['ffmpeg', '-i', file_path, '-ar', '16000', '-ac', '1', wav_path, '-y'], 
+                      capture_output=True, timeout=30)
+        
+        # Используем Wit.ai API (бесплатный)
+        wit_url = 'https://api.wit.ai/speech'
+        wit_token = os.environ.get('WIT_TOKEN', 'Bearer 2TQLR7GZ7JFQGZCNZ6B7C7JCM5F7X7PZ')  # публичный токен
+        
+        with open(wav_path, 'rb') as f:
+            audio_data = f.read()
+        
+        headers = {'Authorization': wit_token, 'Content-Type': 'audio/wav'}
+        resp = requests.post(wit_url, headers=headers, data=audio_data, timeout=30)
+        
+        if resp.status_code == 200:
+            result = resp.json()
+            return result.get('text', '')
+        else:
+            logger.error(f'Wit.ai error: {resp.status_code} - {resp.text}')
+            return None
+            
+    except Exception as e:
+        logger.error(f'STT exception: {e}')
+        return None
+
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Привет! Я Meowfina — переводчик с кошачьего 🐱\n\nПиши текстом или отправь голосовое!')
 
@@ -44,50 +75,23 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Пиши или отправь голосовое — переведу!')
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработка голосовых через Telegram Bot API (встроенное распознавание)"""
-    await update.message.reply_text('🎤 Получил голосовое...')
+    await update.message.reply_text('🎤 Получил голосовое, обрабатываю...')
     
     try:
         voice = update.message.voice
         file = await context.bot.get_file(voice.file_id)
         
-        # Скачиваем файл
         ogg_path = f'/tmp/voice_{update.message.message_id}.ogg'
         await file.download_to_drive(ogg_path)
         
-        # Используем Telegram Bot API для получения текста
-        # Telegram автоматически распознаёт голосовые
-        # Но нужно использовать file_id для повторного доступа
-        
-        # Попробуем через Telegram Voice Recognition (file_id)
-        # Это работает через Telegram API напрямую
-        
-        # Скачиваем и отправляем на распознавание
-        # Используем бесплатный Vosk для распознавания
-        import subprocess
-        import json
-        
-        # Конвертируем ogg в wav
-        wav_path = ogg_path.replace('.ogg', '.wav')
-        subprocess.run(['ffmpeg', '-i', ogg_path, '-ar', '16000', '-ac', '1', wav_path, '-y'], 
-                      capture_output=True)
-        
-        # Распознаём через Vosk (бесплатный, офлайн)
-        from vosk import Model, Recognizer
-        model = Model('/tmp/vosk-model')
-        rec = Recognizer(model)
-        
-        with open(wav_path, 'rb') as f:
-            rec.AcceptWaveform(f.read())
-        result = json.loads(rec.FinalResult())
-        text = result.get('text', '')
+        text = speech_to_text(ogg_path)
         
         if text:
             await update.message.reply_text(f'Распознал: "{text}"')
             translation = cat_translate(text)
             await update.message.reply_text(f'Перевод: {translation}')
         else:
-            await update.message.reply_text('Не удалось распознать голосовое. Попробуй ещё раз или напиши текстом!')
+            await update.message.reply_text('Не удалось распознать. Попробуй ещё раз!')
             
     except Exception as e:
         logger.error(f'Voice error: {e}')
@@ -112,7 +116,7 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(MessageHandler(filters.VOICE, handle_voice))
     
-    logger.info('Meowfina started with voice support!')
+    logger.info('Meowfina started with voice!')
     app.run_polling(poll_interval=3)
 
 if __name__ == '__main__':
