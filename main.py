@@ -37,25 +37,28 @@ def cat_translate(text):
         return 'Ошибка перевода'
     return ru
 
-# Google Speech Recognition через gTTS (для преобразования текста в речь)
-# Но для распознавания используем бесплатный Wit.ai
+# Wit.ai STT
 def speech_to_text(file_path):
-    """Распознавание через Wit.ai (бесплатно, 60 сек/мес)"""
     try:
         # Конвертируем ogg в wav
         wav_path = file_path.replace('.ogg', '.wav')
         subprocess.run(['ffmpeg', '-i', file_path, '-ar', '16000', '-ac', '1', wav_path, '-y'], 
                       capture_output=True, timeout=30)
         
-        # Используем Wit.ai API (бесплатный)
+        wit_token = os.environ.get('WIT_TOKEN')
+        if not wit_token:
+            logger.error('WIT_TOKEN not set')
+            return None
+        
         wit_url = 'https://api.wit.ai/speech'
-        wit_token = os.environ.get('WIT_TOKEN', 'Bearer 2TQLR7GZ7JFQGZCNZ6B7C7JCM5F7X7PZ')  # публичный токен
+        headers = {'Authorization': f'Bearer {wit_token}'}
         
         with open(wav_path, 'rb') as f:
             audio_data = f.read()
         
-        headers = {'Authorization': wit_token, 'Content-Type': 'audio/wav'}
         resp = requests.post(wit_url, headers=headers, data=audio_data, timeout=30)
+        
+        logger.info(f'Wit.ai response: {resp.status_code}')
         
         if resp.status_code == 200:
             result = resp.json()
@@ -75,7 +78,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Пиши или отправь голосовое — переведу!')
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('🎤 Получил голосовое, обрабатываю...')
+    await update.message.reply_text('🎤 Обрабатываю голосовое...')
     
     try:
         voice = update.message.voice
@@ -116,7 +119,7 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(MessageHandler(filters.VOICE, handle_voice))
     
-    logger.info('Meowfina started with voice!')
+    logger.info('Meowfina started!')
     app.run_polling(poll_interval=3)
 
 if __name__ == '__main__':
