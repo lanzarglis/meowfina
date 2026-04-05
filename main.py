@@ -9,22 +9,18 @@ logger = logging.getLogger(__name__)
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 
-# LibreTranslate endpoint (бесплатный)
-LT_URL = os.environ.get('LT_URL', 'https://libretranslate.com')
-
+# MyMemory Translate API (бесплатный, без ключа)
 def translate(text, src='ru', tgt='en'):
     try:
-        resp = requests.post(f'{LT_URL}/translate', json={
-            'q': text,
-            'source': src,
-            'target': tgt,
-            'format': 'text'
-        }, timeout=10)
+        url = 'https://api.mymemory.translated.net/get'
+        params = {'q': text, 'langpair': f'{src}|{tgt}'}
+        resp = requests.get(url, params=params, timeout=10)
         if resp.status_code == 200:
-            return resp.json().get('translatedText', '')
-        else:
-            logger.error(f'Translate error {resp.status_code}: {resp.text}')
-            return None
+            data = resp.json()
+            if data.get('responseStatus') == 200:
+                return data.get('responseData', {}).get('translatedText', '')
+        logger.error(f'Translate error: {resp.text}')
+        return None
     except Exception as e:
         logger.error(f'Translate exception: {e}')
         return None
