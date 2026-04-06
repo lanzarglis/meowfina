@@ -4,7 +4,7 @@
   "build": {
     "builder": "NIXPACKS",
     "nixpacks": {
-      "pkgs": ["ffmpeg"]
+      "install": ["ffmpeg"]
     }
   },
   "run": {
