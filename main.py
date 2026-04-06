@@ -3,13 +3,51 @@ import logging
 import time
 import requests
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextType
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 ASSEMBLYAI_API_KEY = os.environ.get('ASSEMBLYAI_API_KEY')
+
+# Cat dictionary - real cat translations
+CAT_DICT = {
+    'мяу': 'я голодный / накорми меня',
+    'мур': 'погладь меня / я тебя люблю',
+    'мурр': 'мне хорошо / я счастлив',
+    'гав': 'сторож / опасность',
+    'хрю': 'привет / поиграй со мной',
+    'кря': 'дай поесть',
+    'шип': 'уйди / не трогай меня',
+    'трель': 'я рад тебя видеть',
+    'фыр': 'мне не нравится',
+    'воу': 'охота / вижу добычу',
+}
+
+def cat_translate(text):
+    """Translate cat sounds to human language"""
+    if not text or not text.strip():
+        return '🐱 Мяу? (Не понимаю...)'
+    
+    text_lower = text.lower()
+    found = []
+    
+    for cat_sound, meaning in CAT_DICT.items():
+        if cat_sound in text_lower:
+            found.append(f"{cat_sound} → {meaning}")
+    
+    if found:
+        return '🐱 Перевод:\n' + '\n'.join(found)
+    
+    # No known cat sounds - use MyMemory as fallback
+    en = translate(text, 'ru', 'en')
+    if not en:
+        return '🐱 Не распознано. Попробуй мяукнуть!'
+    ru = translate(en, 'en', 'ru')
+    if not ru:
+        return '🐱 Не распознано. Попробуй мяукнуть!'
+    return f'🐱 Перевод:\n{ru}'
 
 def translate(text, src='ru', tgt='en'):
     try:
@@ -25,17 +63,6 @@ def translate(text, src='ru', tgt='en'):
     except Exception as e:
         logger.error(f'Translate exception: {e}')
         return None
-
-def cat_translate(text):
-    if not text or not text.strip():
-        return '🐱 Мяу? Что ты хочешь сказать?'
-    en = translate(text, 'ru', 'en')
-    if not en:
-        return '🐱 Мяу! (Не понял)'
-    ru = translate(en, 'en', 'ru')
-    if not ru:
-        return '🐱 Мяу! (Не понял)'
-    return ru
 
 def speech_to_text(audio_url):
     try:
@@ -84,17 +111,17 @@ def speech_to_text(audio_url):
         logger.error(f'Speech to text exception: {e}')
         return None
 
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Привет! Я Мяуфина - кото-переводчик!\n\nОтправь мне текст или голосовое — переведу!')
+async def start_command(update: Update, context: ContextType.DEFAULT_TYPE):
+    await update.message.reply_text('🐱 Привет! Я Мяуфина - кошачий переводчик!\n\nОтправь мне голосовое "мяу" - и я переведу его на человеческий язык!')
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Команды:\n/start - Старт\n/help - Помощь\n\nПросто отправь текст или голосовое - переведу на кошачий!')
+async def help_command(update: Update, context: ContextType.DEFAULT_TYPE):
+    await update.message.reply_text('🐱 Команды:\n/start - Начать\n/help - Помощь\n\nПросто отправь мне голосовое сообщение с мяуканьем!')
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle_message(update: Update, context: ContextType.DEFAULT_TYPE):
     translation = cat_translate(update.message.text)
     await update.message.reply_text(translation)
 
-async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def handle_voice(update: Update, context: ContextType.DEFAULT_TYPE):
     try:
         voice = update.message.voice
         file = await context.bot.get_file(voice.file_id)
@@ -103,15 +130,15 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         file_url = f"https://api.telegram.org/file/bot{TELEGRAM_BOT_TOKEN}/{file.file_path}"
         logger.info(f'Voice file URL: {file_url}')
 
-        await update.message.reply_text('🐱 Слушаю... обрабатываю голосовое...')
+        await update.message.reply_text('🐱 Слушаю... Распознаю голос...')
 
         text = speech_to_text(file_url)
 
         if text:
             translation = cat_translate(text)
-            await update.message.reply_text(f'🐱 Ты сказал: {text}\n\nПеревод: {translation}')
+            await update.message.reply_text(f'🐱 Распознано: {text}\n\n{translation}')
         else:
-            await update.message.reply_text('🐱 Мяу... не расслышала. Попробуй ещё раз!')
+            await update.message.reply_text('🐱 Не удалось распознать голос. Попробуй ещё раз!')
 
     except Exception as e:
         logger.error(f'Voice handling error: {e}')
