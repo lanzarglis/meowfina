@@ -1,7 +1,9 @@
+json
 {
+  "$schema": "https://railway.app/schema.json",
   "name": "meowfina",
   "build": {
-    "builder": "Python"
+    "builder": "NIXPACKS"
   },
   "run": {
     "command": "python main.py"
