@@ -3,12 +3,11 @@
   "name": "meowfina",
   "build": {
     "builder": "NIXPACKS",
-    "buildPack": "python"
+    "nixpacks": {
+      "pkgs": ["ffmpeg"]
+    }
   },
   "run": {
     "command": "python main.py"
-  },
-  "nixpacks": {
-    "packages": ["ffmpeg", "pkgconfig", "portaudio"]
   }
 }
