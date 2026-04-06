@@ -1,18 +1,15 @@
 import os
 import logging
+import time
 import requests
-import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 ASSEMBLYAI_API_KEY = os.environ.get('ASSEMBLYAI_API_KEY')
-
-# Python Meowfina Bot
-# Cat translator - mauro based on MyMemory API
 
 def translate(text, src='ru', tgt='en'):
     try:
@@ -34,13 +31,12 @@ def cat_translate(text):
         return '🐱 Мяу? Что ты хочешь сказать?'
     en = translate(text, 'ru', 'en')
     if not en:
-        return '🐱 Мяу! (Не поняла)'
+        return '🐱 Мяу! (Не понял)'
     ru = translate(en, 'en', 'ru')
     if not ru:
-        return '🐱 Мяу! (Не поняла)'
+        return '🐱 Мяу! (Не понял)'
     return ru
 
-# AssemblyAI API for speech-to-text
 def speech_to_text(audio_url):
     try:
         if not ASSEMBLYAI_API_KEY:
@@ -63,19 +59,26 @@ def speech_to_text(audio_url):
             return None
 
         transcribe_id = transcribe_resp.json()['id']
+        logger.info(f'Transcription ID: {transcribe_id}')
 
         # Poll for result
-        while True:
+        for _ in range(20):  # Max 60 seconds
+            time.sleep(3)
             result = requests.get(
                 f'https://api.assemblyai.com/v2/transcription/{transcribe_id}',
                 headers={'authorization': ASSEMBLYAI_API_KEY}
             )
-            if result.json()['status'] == 'completed':
-                return result.json()['text']
-            elif result.json()['status'] == 'error':
-                logger.error(f'Transcription error: {result.json()}')
+            result_json = result.json()
+            logger.info(f'Transcription status: {result_json.get("status")}')
+
+            if result_json['status'] == 'completed':
+                return result_json['text']
+            elif result_json['status'] == 'error':
+                logger.error(f'Transcription error: {result_json}')
                 return None
-            asyncio.sleep(3)
+
+        logger.error('Transcription timeout')
+        return None
 
     except Exception as e:
         logger.error(f'Speech to text exception: {e}')
@@ -93,28 +96,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
-        # Get voice file
         voice = update.message.voice
         file = await context.bot.get_file(voice.file_id)
 
-        # Download voice to temp file
-        voice_path = f"/tmp/voice_{voice.file_id}.ogg"
-        await file.download_to_drive(voice_path)
-
-        # Convert to mp3 for AssemblyAI (or use direct URL)
-        # AssemblyAI can handle ogg files directly
-
         # Get direct URL from Telegram
         file_url = f"https://api.telegram.org/file/bot{TELEGRAM_BOT_TOKEN}/{file.file_path}"
+        logger.info(f'Voice file URL: {file_url}')
 
-        # Transcribe
         await update.message.reply_text('🐱 Слушаю... обрабатываю голосовое...')
 
         text = speech_to_text(file_url)
 
         if text:
             translation = cat_translate(text)
-            await update.message.reply_text(f"🐱 Ты сказал: {text}\n\nПеревод: {translation}")
+            await update.message.reply_text(f'🐱 Ты сказал: {text}\n\nПеревод: {translation}')
         else:
             await update.message.reply_text('🐱 Мяу... не расслышала. Попробуй ещё раз!')
 
