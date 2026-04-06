@@ -1,6 +1,7 @@
 import os
 import logging
 import requests
+import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -12,8 +13,6 @@ ASSEMBLYAI_API_KEY = os.environ.get('ASSEMBLYAI_API_KEY')
 
 # Python Meowfina Bot
 # Cat translator - mauro based on MyMemory API
-
-# AssemblyAI API for speech-to-text
 
 def translate(text, src='ru', tgt='en'):
     try:
@@ -41,26 +40,12 @@ def cat_translate(text):
         return '🐱 Мяу! (Не поняла)'
     return ru
 
-# AssemblyAI API ref (speech-to-text)
-def speech_to_text(file_path):
+# AssemblyAI API for speech-to-text
+def speech_to_text(audio_url):
     try:
         if not ASSEMBLYAI_API_KEY:
             logger.error('ASSEMBLYAI_API_KEY not set')
             return None
-
-        # Upload audio file
-        with open(file_path, 'rb') as f:
-            upload_resp = requests.post(
-                'https://api.assemblyai.com/v2/upload',
-                headers={'authorization': ASSEMBLYAI_API_KEY},
-                data=f,
-                timeout=60
-            )
-        if upload_resp.status_code != 200:
-            logger.error(f'Upload error: {upload_resp.text}')
-            return None
-
-        audio_url = upload_resp.json()['upload_url']
 
         # Transcribe audio
         transcribe_resp = requests.post(
@@ -90,24 +75,52 @@ def speech_to_text(file_path):
             elif result.json()['status'] == 'error':
                 logger.error(f'Transcription error: {result.json()}')
                 return None
+            asyncio.sleep(3)
 
     except Exception as e:
         logger.error(f'Speech to text exception: {e}')
         return None
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Привет! Я Мяуфина - кото-переводчик!\n\nОтправь мне текст, и я переведу его на кошачий язык!')
+    await update.message.reply_text('🐱 Привет! Я Мяуфина - кото-переводчик!\n\nОтправь мне текст или голосовое — переведу!')
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Команды:\n/start - Старт\n/help - Помощь\n\nПросто отправь текст - переведу на кошачий!')
-
+    await update.message.reply_text('🐱 Команды:\n/start - Старт\n/help - Помощь\n\nПросто отправь текст или голосовое - переведу на кошачий!')
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     translation = cat_translate(update.message.text)
     await update.message.reply_text(translation)
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Слушаю ваше мяу... (голосовые пока не работают)')
+    try:
+        # Get voice file
+        voice = update.message.voice
+        file = await context.bot.get_file(voice.file_id)
+
+        # Download voice to temp file
+        voice_path = f"/tmp/voice_{voice.file_id}.ogg"
+        await file.download_to_drive(voice_path)
+
+        # Convert to mp3 for AssemblyAI (or use direct URL)
+        # AssemblyAI can handle ogg files directly
+
+        # Get direct URL from Telegram
+        file_url = f"https://api.telegram.org/file/bot{TELEGRAM_BOT_TOKEN}/{file.file_path}"
+
+        # Transcribe
+        await update.message.reply_text('🐱 Слушаю... обрабатываю голосовое...')
+
+        text = speech_to_text(file_url)
+
+        if text:
+            translation = cat_translate(text)
+            await update.message.reply_text(f"🐱 Ты сказал: {text}\n\nПеревод: {translation}")
+        else:
+            await update.message.reply_text('🐱 Мяу... не расслышала. Попробуй ещё раз!')
+
+    except Exception as e:
+        logger.error(f'Voice handling error: {e}')
+        await update.message.reply_text('🐱 Ошибка при обработке голоса. Попробуй ещё раз!')
 
 def main():
     if not TELEGRAM_BOT_TOKEN:
