@@ -1,0 +1,9 @@
+{
+  "name": "meowfina",
+  "build": {
+    "builder": "Python"
+  },
+  "run": {
+    "command": "python main.py"
+  }
+}
