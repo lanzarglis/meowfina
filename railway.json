@@ -1,11 +1,10 @@
+json
 {
   "$schema": "https://railway.app/schema.json",
   "name": "meowfina",
   "build": {
-    "builder": "NIXPACKS",
-    "nixpacks": {
-      "install": ["ffmpeg"]
-    }
+    "builder": "DOCKERFILE",
+    "dockerfile": "Dockerfile"
   },
   "run": {
     "command": "python main.py"
