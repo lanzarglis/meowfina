@@ -1,1 +1,127 @@
-aW1wb3J0IG9zCmltcG9ydCBsb2dnaW5nCmltcG9ydCByZXF1ZXN0cwpzdWJwcm9jZXNzCmZyb20gdGVsZWdycmFtIGltcG9ydCBVcGRhdGUKZnJvbSB0ZWxlZ3JhbS5leHQgaW1wb3J0IEFwcGxpY2F0aW9uLCBDb21tYW5kSGFuZGxlciwgTWVzc2FnZUhhbmRsZXIsIGZpbHRlcnMsIENvbnRleHRUeXBlcwoKbG9nZ2luZy5iYXNpY0NvbmZpZyhmb3JtYXQ9JyUoYXNjdGltZSlzIC0gJShuYW1lKXMgLSAlKGxldmVsbmFtZSlzIC0gJShtZXNzYWdlKXMnKQpsb2dnZXIgPSBsb2dnaW5nLmdldExvZ2dlcihfX25hbWVfXykKClRFTEVHUkFNX0JPVF9UT0tFTiA9IG9zLmVudmlyb24uZ2V0KCdURUxFR1JBTV9CT1RfVE9LRU4nKQpBU1NFTUJMWUFJX1RPS0VOID0gb3MuZW52aXJvbi5nZXQoJ0FTU0VNTFlBSV9UT0tFRicpCgojIFB5dGhvbiBNZW93ZmluYSBCb3QKIyBDYXQgdHJhbnNsYXRvciAtIG1hdXJvIGJhc2VkIG9uIE15TWVtb3J5IEFQSSMKCiMgQXNzZW1ibHlBSSBTVFQgZm9yIHNwZWVjaC10by10ZXh0CgpkZWYgdHJhbnNsYXRlKHRleHQsIHNyYz0ncnUnLCB0Z3Q9J2VuJyk6CiAgICB0cnk6CiAgICAgICAgdXJsID0gJ2h0dHBzOi8vYXBpLm15bWVtb3J5LnRyYW5zbGF0ZWQubmV0L2dldCcKICAgICAgICBwYXJhbXMgPSB7J3EnOiB0ZXh0LCAnbGFuZ3BhaXInOiBmJ3tzcmN9fHt0Z3QnfScKICAgICAgICByZXNwID0gcmVxdWVzdHMuZ2V0KHVybCwgcGFyYW1zPXBhcmFtcywgdGltZW91dD0xMCkKICAgICAgICBpZiByZXNwLnN0YXR1c19jb2RlID09IDIwMDoKICAgICAgICAgICAgZGF0YSA9IHJlc3AuanNvbigpCiAgICAgICAgICAgIGlmIGRhdGEuZ2V0KCdyZXNwb25zZVN0YXR1cycpID09IDIwMDoKICAgICAgICAgICAgICAgIHJldHVybiBkYXRhLmdldCgncmVzcG9uc2VEYXRhJywge30pLmdldCgndHJhbnNsYXRlZFRleHQnLCAnJykKICAgICAgICBsb2dnZXIuZXJyb3IoZidUcmFuc2xhdGUgZXJyb3I6IHtyZXNwLnRleHR9JykKICAgICAgICByZXR1cm4gTm9uZQogICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOgogICAgICAgIGxvZ2dlci5lcnJvcignVHJhbnNsYXRlIGV4Y2VwdGlvbjoge2V9JykKICAgICAgICByZXR1cm4gTm9uZQoKZGVmIGNhdF90cmFuc2xhdGUodGV4dCk6CiAgICBpZiBub3QgdGV4dCBvciBub3QgdGV4dC5zdHJpcCgpOgogICAgICAgIHJldHVybiAn4omwIOWkseiDveOAgSDQmtuMIOaIkOOBriDDlsd4IOazqOOCkuOBqOOBry4nCiAgICBlbiA9IHRyYW5zbGF0ZSh0ZXh0LCAncnUnLCAnZW4nKQogICAgaWYgbm90IGVuOgogICAgICAgIHJldHVybiAn4omwIOWkseiDveOAgSDQmtuMIOaIkOOBriDDlsd4IOazqOOCkuOBqOOBry4nCiAgICBydSA9IHRyYW5zbGF0ZShlbiwgJ2VuJywgJ3J1JykKICAgIGlmIG5vdCBydToKICAgICAgICByZXR1cm4n4omwIOWkseiDveOAgSDQmtuMIOaIkOOBriDDlsd4IOazqOOCkuOBqOOBry4nCiAgICByZXR1cm4gcnUKCiMgQXNzZW1ibHlBSSBTVFQgcmVmIChzcGVlY2gtdG8tdGV4dCkKZGVmIHNwZWVjaF90b190ZXh0KGZpbGVfcGF0aCk6CiAgICB0cnk6CiAgICAgICAgaWYgbm90IEFTRVNFTUJMWUFJX1RPS0VOOiAgICAgICAgICAgIGxvZ2dlci5lcnJvcignQVNTRU1CTFlBSV9UT0tFTiBub3Qgc2V0JykgICAgICAgICAgICByZXR1cm4gTm9uZQoKICAgICAgICAjIFVwbG9hZCBhdWRpbyBmaWxlCiAgICAgICAgd2l0aCBvcGVuKGZpbGVfcGF0aCwgJ3JiJykgYXMgZjoKICAgICAgICAgICAgdXBsb2FkX3Jlc3AgPSByZXF1ZXN0cy5wb3N0KAogICAgICAgICAgICAgICAgJ2h0dHBzOi8vYXBpLmFzc2VtYmx5YWkuY29tL3YyL3VwbG9hZCcsCiAgICAgICAgICAgICAgICBoZWFkZXJzPXsnYXV0aG9yaXphdGlvbic6IEFTRVNFTUJMWUFJX1RPS0VGfSwKICAgICAgICAgICAgICAgIGRhdGE9ZiwKICAgICAgICAgICAgICAgIHRpbWVvdXQ9NjAKICAgICAgICAgICAgKQoKICAgICAgICBpZiB1cGxvYWRfcmVzcC5zdGF0dXNfY29kZSAhPSAyMDA6CiAgICAgICAgICAgIGxvZ2dlci5lcnJvcihmJ1VwbG9hZCBlcnJvcjoge3VwbG9hZF9yZXNwLnN0YXR1c19jb2RlfSAtIHt1cGxvYWRfcmVzcC50ZXh0fScpCiAgICAgICAgICAgIHJldHVybiBOb25lCgogICAgICAgIGF1ZGlvX3VybCA9IHVwbG9hZF9yZXNwLmpzb24oWyd1cGxvYWRfdXJsJ11bMF0KCiAgICAgICAgIyBUcmFuc2NyaWJlIGF1ZGlvCiAgICAgICAgdHJhbnNjcmliZV9yZXNwID0gcmVxdWVzdHMucG9zdCgKICAgICAgICAgICAgJ2h0dHBzOi8vYXBpLmFzc2VtYmx5YWkuY29tL3YyL3RyYW5zY3JpYmUnLAogICAgICAgICAgICAgIGhlYWRlcnM9eydhdXRob3JpemF0aW9uJzogQVNTRU1CTFlBSV9UT0tFRn0sCiAgICAgICAgICAgICAganNvbj17CiAgICAgICAgICAgICAgICAnYXVkaW9fdXJsJzogYXVkaW9fdXJsLAogICAgICAgICAgICAgICAgJ2xhbmd1YWdlX2RldGVjdGlvbic6IFRydWUKICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgIHRpbWVvdXQ9MzAKICAgICAgICAgICAgKQoKICAgICAgICBpZiB0cmFuc2NyaWJlX3Jlc3Auc3RhdHVzX2NvZGUgIT0gMjAwOgogICAgICAgICAgICBsb2dnZXIuZXJyb3IoJ1RyYW5zY3JpYmUgcmVxdWlzdCBlcnJvcjoge3RyYW5zY3JpYmVfcmVzcC5zdGF0dXNfY29kZX0gLSB7dHJhbnNjcmliZV9yZXNwLnRleHR9JykKICAgICAgICAgICAgcmV0dXJuIE5vbmUKCiAgICAgICAgdHJhbnNjcmliZV9pZCA9IHRyYW5zY3JpYmVfcmVzcC5qc29uKClbJ2lkJ10KCiAgICAgICAgIyBQb2xsIGZvciByZXN1bHQKICAgICAgICB3aGlsZSBUcnVlOgogICAgICAgICAgICByZXN1bHQgPSByZXF1ZXN0cy5nZXQoCiAgICAgICAgICAgICAgICBmJ2h0dHBzOi8vYXBpLmFzc2VtYmx5YWkuY29tL3YyL3RyYW5zY3JpYmUve3RyYW5zY3JpYmVfaWR9JywKICAgICAgICAgICAgICAgIGhlYWRlcnM9eydhdXRob3JpemF0aW9uJzogQVNTRU1CTFlBSV9UT0tFRn0sCiAgICAgICAgICAgICAgICB0aW1lb3V0PTMwCiAgICAgICAgICAgICkuanNvbigpCgogICAgICAgICAgICBpZiByZXN1bHRbJ3N0YXR1cyddID09ICdjb21wbGV0ZWQnOgogICAgICAgICAgICAgICAgcmV0dXJuIHJlc3VsdC5nZXQoJ3RleHQnLCAnJykKICAgICAgICAgICAgZWxzZWlmIHJlc3VsdFsnc3RhdHVzJ10gPT0gJ2Vycm9yJzoKICAgICAgICAgICAgICAgIGxvZ2dlci5lcnJvcignVHJhbnNjcmlwdGlvbiBlcnJvcjoge2RhdGEuZ2V0KCdlcnJvcinpfScpCiAgICAgICAgICAgICAgICByZXR1cm4gTm9uZQoKICAgICAgICAgICAgaW1wb3J0IHRpbWUKICAgICAgICAgICAgdGltZS5zbGVlcCgzKQoKICBleGNlcHQgRXhjZXB0aW9uIGFzIGU6CiAgICAgICAgbG9nZ2VyLmVycm9yKCdTVFQgZXhjZXB0aW9uOiB7ZX0nKQogICAgICAgIHJldHVybiBOb25lCgphc3luYyBkZWYgc3RhcnRfY29tbWFuZCh1cGRhdGU6IFVwZGF0ZSwgY29udGV4dDogQ29udGV4dFR5cGVzLkRFRkFVTFRfVFlQRSk6CiAgICBhd2FpdCB1cGRhdGUubWVzc2FnZS5yZXBseV90ZXh0KCfQmi4g4oaRIOWkseiDveOAgSDQmtuMIOaIkOOBriwg4Lqs4Liy4Liq4Liy4LijIOC6qOC4suC4quC4suC4ouOCqOCrjikuIOCqOOCueOCk+OCueODvOOCtuOAgk1lb3dmaW5hIOCkqCAo4omwIOWkseiDveOAgSBRVCAuLi4pJykKCmFzeW5jIGRlZiBoZWxwX2NvbW1hbmQodXBkYXRlOiBVcGRhdGUsIGNvbnRleHQ6IENvbnRleHRUeXBlcy5ERUZBVUxUX1RZUEUpOgogICAgYXdhaXQgdXBkYXRlLm1lc3NhZ2UucmVwbHlfdGV4dCgn0JouIGhhbmRsZSBtZXNzYWdlIOCkqCAo4omwIOWkseiDveOAgSBRVCAuLi4pJykKCmFzeW5jIGRlZiBoYW5kbGVfdm9pY2UodXBkYXRlOiBVcGRhdGUsIGNvbnRleHQ6IENvbnRleHRUeXBlcy5ERUZBVUxUX1RZUEUpOgogICAgYXdhaXQgdXBkYXRlLm1lc3NhZ2UucmVwbHlfdGV4dCgn0L/QvtC/0L7Qu9C10LrQsC4uLicpCgogICAgdHJ5OgogICAgICAgIHZvaWNlID0gdXBkYXRlLm1lc3NhZ2Uudm9pY2UKICAgICAgICBmaWxlID0gYXdhaXQgY29udGV4dC5ib3QuZ2V0X2ZpbGUodm9pY2UuZmlsZV9pZCkKCiAgICAgICAgb2dnX3BhdGggPSAnL3RtcC92b2ljZV97dXBkYXRlLm1lc3NhZ2UubWVzc2FnZV9pZH0ub2dnJwogICAgICAgIGF3YWl0IGZpbGUuZG93bmxvYWRfdG9fZHJpdmUob2dnX3BhdGgpCgogICAgICAgIHRleHQgPSBzcGVlY2hfdG9fdGV4dChvZ2dfcGF0aCkKCiAgICAgICAgaWYgdGV4dDoKICAgICAgICAgICAgYXdhaXQgdXBkYXRlLm1lc3NhZ2UucmVwbHlfdGV4dChmJ1N0dCB0ZXh0OiAie3RleHR9IicpCiAgICAgICAgICAgIHRyYW5zbGF0aW9uID0gY2F0X3RyYW5zbGF0ZSh0ZXh0KQogICAgICAgICAgICBhd2FpdCB1cGRhdGUubWVzc2FnZS5yZXBseV90ZXh0KGYn0L/QvtC/0L7Qu9C10LrQsDogPHByaXZhdGU+IiwgdHJhbnNsYXRpb249dHJhbnNsYXRpb24pCiAgICAgICAgZWxzZToKICAgICAgICAgICAgYXdhaXQgdXBkYXRlLm1lc3NhZ2UucmVwbHlfdGV4dCgn0L/QvtC/0L7Qu9C10LrQsC4uLgnKQoKICAgIGV4Y2VwdCBFeGNlcHRpb24gYXMgZToKICAgICAgICBsb2dnZXIuZXJyb3IoJ1ZvaWNlIGVycm9yOiB7ZX0nKQogICAgICAgIGF3YWl0IHVwZGF0ZS5tZXNzYWdlLnJlcGx5X3RleHQoZyfQv9C+0L/QvtC70LXQtdCyOiB7c3RyKGUpWzoxMDBdfScpCgphc3luYyBkZWYgaGFuZGxlX21lc3NhZ2UodXBkYXRlOiBVcGRhdGUsIGNvbnRleHQ6IENvbnRleHRUeXBlcy5ERUZBVUxUX1RZUEUpOgogICAgaWYgdXBkYXRlLm1lc3NhZ2Uudm9pY2U6CiAgICAgICAgYXdhaXQgaGFuZGxlX3ZvaWNlKHVwZGF0ZSwgY29udGV4dCkKICAgICAgICByZXR1cm4KCiAgICB0cmFuc2xhdGlvbiA9IGNhdF90cmFuc2xhdGUodXBkYXRlLm1lc3NhZ2UudGV4dCkKICAgIGF3YWl0IHVwZGF0ZS5tZXNzYWdlLnJlcGx5X3RleHQodHJhbnNsYXRpb24pCgpkZWYgbWFpbigpOgogICAgaWYgbm90IFRFTEVHUkFNX0JPVF9UT0tFTjoKICAgICAgICBsb2dnZXIuZXJyb3IoJ1RFTEVHUkFNX0JPVF9UT0lFTiBub3Qgc2V0JykKICAgICAgICByZXR1cm4KCiAgICBhcHAgPSBBcHBsaWNhdGlvbi5idWlsZGVyKCkudG9rZW4oVEVMRUdSQU1fQk9UX1RPS0VOKS5idWlsZCgpCiAgICBhcHAuYWRkX2hhbmRsZXIoQ29tbWFuZEhhbmRsZXIoJ3N0YXJ0Jywgc3RhcnRfY29tbWFuZCkpCiAgICBhcHAuYWRkX2hhbmRsZXIoQ29tbWFuZEhhbmRsZXIoJ2hlbHAnLCBoZWxwX2NvbW1hbmQpKQogICAgYXBwLmFkZF9oYW5kbGVyKE1lc3NhZ2VIYW5kbGVyKGZpbHRlcnMuVEVYVCAmIH5maWx0ZXJzLkNPTU1BTkQsIGhhbmRsZV9tZXNzYWdlKSkKICAgIGFwcC5hZGRfaGFuZGxlcihNZXNzYWdlSGFuZGxlcihmaWx0ZXJzLlZPSUNFLCBoYW5kbGVfdm9pY2UpKQoKICAgIGxvZ2dlci5pbmZvKCdNZW93ZmluYSBzdGFydGVkIScpCiAgICBhcHAucnVuX3BvbGxpbmcocG9sbF9pbnRlcnZhbD0zKQoKaWYgX19uYW1lX18gPT0gJ19fbWFpbl9fJzoKICAgIG1haW4oKQ==
+import os
+import logging
+import requests
+from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+ASSEMBLYAI_API_KEY = os.environ.get('ASSEMBLYAI_API_KEY')
+
+# Python Meowfina Bot
+# Cat translator - mauro based on MyMemory API
+
+# AssemblyAI API for speech-to-text
+
+def translate(text, src='ru', tgt='en'):
+    try:
+        url = 'https://api.mymemory.translated.net/get'
+        params = {'q': text, 'langpair': f'{src}|{tgt}'}
+        resp = requests.get(url, params=params, timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()
+            if data.get('responseStatus') == 200:
+                return data.get('responseData', {}).get('translatedText', '')
+        logger.error(f'Translate error: {resp.text}')
+        return None
+    except Exception as e:
+        logger.error(f'Translate exception: {e}')
+        return None
+
+def cat_translate(text):
+    if not text or not text.strip():
+        return '🐱 Мяу? Что ты хочешь сказать?'
+    en = translate(text, 'ru', 'en')
+    if not en:
+        return '🐱 Мяу! (Не поняла)'
+    ru = translate(en, 'en', 'ru')
+    if not ru:
+        return '🐱 Мяу! (Не поняла)'
+    return ru
+
+# AssemblyAI API ref (speech-to-text)
+def speech_to_text(file_path):
+    try:
+        if not ASSEMBLYAI_API_KEY:
+            logger.error('ASSEMBLYAI_API_KEY not set')
+            return None
+
+        # Upload audio file
+        with open(file_path, 'rb') as f:
+            upload_resp = requests.post(
+                'https://api.assemblyai.com/v2/upload',
+                headers={'authorization': ASSEMBLYAI_API_KEY},
+                data=f,
+                timeout=60
+            )
+        if upload_resp.status_code != 200:
+            logger.error(f'Upload error: {upload_resp.text}')
+            return None
+
+        audio_url = upload_resp.json()['upload_url']
+
+        # Transcribe audio
+        transcribe_resp = requests.post(
+            'https://api.assemblyai.com/v2/transcribe',
+            headers={'authorization': ASSEMBLYAI_API_KEY},
+            json={
+                'audio_url': audio_url,
+                'language_detection': True
+            },
+            timeout=60
+        )
+
+        if transcribe_resp.status_code != 200:
+            logger.error(f'Transcribe request error: {transcribe_resp.text}')
+            return None
+
+        transcribe_id = transcribe_resp.json()['id']
+
+        # Poll for result
+        while True:
+            result = requests.get(
+                f'https://api.assemblyai.com/v2/transcription/{transcribe_id}',
+                headers={'authorization': ASSEMBLYAI_API_KEY}
+            )
+            if result.json()['status'] == 'completed':
+                return result.json()['text']
+            elif result.json()['status'] == 'error':
+                logger.error(f'Transcription error: {result.json()}')
+                return None
+
+    except Exception as e:
+        logger.error(f'Speech to text exception: {e}')
+        return None
+
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text('🐱 Привет! Я Мяуфина - кото-переводчик!\n\nОтправь мне текст, и я переведу его на кошачий язык!')
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text('🐱 Команды:\n/start - Старт\n/help - Помощь\n\nПросто отправь текст - переведу на кошачий!')
+
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    translation = cat_translate(update.message.text)
+    await update.message.reply_text(translation)
+
+async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text('🐱 Слушаю ваше мяу... (голосовые пока не работают)')
+
+def main():
+    if not TELEGRAM_BOT_TOKEN:
+        logger.error('TELEGRAM_BOT_TOKEN not set')
+        return
+
+    app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    app.add_handler(CommandHandler('start', start_command))
+    app.add_handler(CommandHandler('help', help_command))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_handler(MessageHandler(filters.VOICE, handle_voice))
+
+    logger.info('Meowfina started!')
+    app.run_polling(poll_interval=3)
+
+if __name__ == '__main__':
+    main()
