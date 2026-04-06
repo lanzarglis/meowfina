@@ -1,1 +1,14 @@
-{"$schema": "https://railway.app/schema.json", "name": "meowfina", "build": {"builder": "NIXPACKS"}, "run": {"command": "python main.py"}}
+{
+  "$schema": "https://railway.app/schema.json",
+  "name": "meowfina",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildPack": "python"
+  },
+  "run": {
+    "command": "python main.py"
+  },
+  "nixpacks": {
+    "packages": ["ffmpeg", "pkgconfig", "portaudio"]
+  }
+}
