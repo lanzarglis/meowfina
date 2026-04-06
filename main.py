@@ -11,43 +11,64 @@ logger = logging.getLogger(__name__)
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 ASSEMBLYAI_API_KEY = os.environ.get('ASSEMBLYAI_API_KEY')
 
-# Cat dictionary - real cat translations
+# Scientific cat dictionary - based on Animal Behaviour research
 CAT_DICT = {
-    'мяу': 'я голодный / накорми меня',
-    'мур': 'погладь меня / я тебя люблю',
-    'мурр': 'мне хорошо / я счастлив',
-    'гав': 'сторож / опасность',
-    'хрю': 'привет / поиграй со мной',
-    'кря': 'дай поесть',
-    'шип': 'уйди / не трогай меня',
-    'трель': 'я рад тебя видеть',
-    'фыр': 'мне не нравится',
-    'воу': 'охота / вижу добычу',
+    # Meowing - different types for different needs
+    'мяу': 'Мяуканье (通用) — приветствие, голод или просьба внимания',
+    'мяу-мяу': 'Мяу-мяу — настоятельная просьба (чаще всего еда)',
+    'мяууу': 'Мяууу — долгий жалобный звук — сильная потребность',
+    
+    # Purring - can mean contentment OR stress/pain
+    'мур': 'Мурлыканье — удовольствие и комфорт (НО: может означать стресс!)',
+    'мурр': 'Мурр — глубокое мурлыканье — расслабление',
+    'муррр': 'Муррр — очень довольный кот',
+    
+    # Chirping/Chattering - hunting excitement + frustration
+    'чик': 'Чириканье — вижу добычу! Охота началась',
+    'чирик': 'Чирик — возбуждение от потенциальной жертвы',
+    'щелк': 'Щелк челюстью — фрустрация: не могу достать добычу',
+    
+    # Trilling - greeting, affection
+    'трр': 'Трель — приветствие! Рад тебя видеть',
+    'тррр': 'Тррр — мягкое приветствие от мамы-кошки к котятам',
+    
+    # Growling/Hissing - warnings
+    'шип': 'Шипение — предупреждение: уйди, не приближайся!',
+    'фыр': 'Фырканье — раздражение, мне не нравится',
+    'рыч': 'Рычание — сильное предупреждение, готов к атаке',
+    'гав': 'Гав — редко, но бывает: защита территории',
+    
+    # Screeching/shrieks - pain or extreme distress
+    'ау': 'Ау! — боль или внезапный страх',
+    'крик': 'Крик — сильная боль или паника',
 }
 
 def cat_translate(text):
-    """Translate cat sounds to human language"""
+    """Translate cat sounds to human language - scientific approach"""
     if not text or not text.strip():
-        return '🐱 Мяу? (Не понимаю...)'
+        return '🐱 Мяу? (Не понимаю...)\n\nПопробуй мяукнуть!)'
     
-    text_lower = text.lower()
+    text_lower = text.lower().strip()
     found = []
     
+    # Check exact matches first
     for cat_sound, meaning in CAT_DICT.items():
         if cat_sound in text_lower:
-            found.append(f"{cat_sound} → {meaning}")
+            found.append(f"🐾 '{cat_sound}' → {meaning}")
     
     if found:
-        return '🐱 Перевод:\n' + '\n'.join(found)
+        result = '🐱 Перевод с кошачьего (научный):\n\n' + '\n\n'.join(found)
+        result += '\n\n📚 Источник: исследования Animal Behaviour'
+        return result
     
     # No known cat sounds - use MyMemory as fallback
     en = translate(text, 'ru', 'en')
     if not en:
-        return '🐱 Не распознано. Попробуй мяукнуть!'
+        return '🐱 Не распознано.\n\nКот молчит или издаёт неизвестный звук. Попробуй мяукнуть!'
     ru = translate(en, 'en', 'ru')
     if not ru:
-        return '🐱 Не распознано. Попробуй мяукнуть!'
-    return f'🐱 Перевод:\n{ru}'
+        return '🐱 Не распознано.\n\nКот молчит или издаёт неизвестный звук. Попробуй мяукнуть!'
+    return f'🐱 Неизвестный звук.\n\nПеревод: {ru}\n\n(Это не кошачий — попробуй мяу!)'
 
 def translate(text, src='ru', tgt='en'):
     try:
@@ -112,10 +133,10 @@ def speech_to_text(audio_url):
         return None
 
 async def start_command(update: Update, context: ContextType.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Привет! Я Мяуфина - кошачий переводчик!\n\nОтправь мне голосовое "мяу" - и я переведу его на человеческий язык!')
+    await update.message.reply_text('🐱 Привет! Я Мяуфина — кошачий переводчик!\n\nМоя логика основана на научных исследованиях вокализации кошек (Animal Behaviour).\n\nОтправь мне голосовое с мяуканьем — и я переведу!')
 
 async def help_command(update: Update, context: ContextType.DEFAULT_TYPE):
-    await update.message.reply_text('🐱 Команды:\n/start - Начать\n/help - Помощь\n\nПросто отправь мне голосовое сообщение с мяуканьем!')
+    await update.message.reply_text('🐱 Команды:\n/start — Начать\n/help — Помощь\n\nПросто отправь мне голосовое сообщение с кошачьими звуками!')
 
 async def handle_message(update: Update, context: ContextType.DEFAULT_TYPE):
     translation = cat_translate(update.message.text)
@@ -136,7 +157,7 @@ async def handle_voice(update: Update, context: ContextType.DEFAULT_TYPE):
 
         if text:
             translation = cat_translate(text)
-            await update.message.reply_text(f'🐱 Распознано: {text}\n\n{translation}')
+            await update.message.reply_text(f'🐱 Распознано: "{text}"\n\n{translation}')
         else:
             await update.message.reply_text('🐱 Не удалось распознать голос. Попробуй ещё раз!')
 
@@ -155,7 +176,7 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(MessageHandler(filters.VOICE, handle_voice))
 
-    logger.info('Meowfina started!')
+    logger.info('Meowfina started with scientific dictionary!')
     app.run_polling(poll_interval=3)
 
 if __name__ == '__main__':
